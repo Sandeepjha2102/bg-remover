@@ -1,4 +1,3 @@
-cat > README.md <<EOF
 # AI Background Remover
 
 An AI-powered web application that automatically removes image backgrounds using ClipDrop API. Users can upload images, remove backgrounds instantly, download transparent images, and purchase credits using Razorpay.
@@ -102,7 +101,3 @@ VITE_RAZORPAY_KEY_ID=
 - Multiple image formats support
 - Faster AI processing
 - Admin analytics panel
-
-## Author
-Sandeep Jha
-EOF
