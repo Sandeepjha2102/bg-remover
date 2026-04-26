@@ -89,11 +89,88 @@ const razorpayInstance = new razorpay({
 });
 
 // ---------------- Create Payment ----------------
+// const paymentRazorpay = async (req, res) => {
+//     try {
+//         const { clerkId, planId } = req.body;
+
+//         const userData = await userModel.findOne({ clerkId });
+
+//         if (!userData || !planId) {
+//             return res.json({
+//                 success: false,
+//                 message: "Invalid Credentials"
+//             });
+//         }
+
+//         let credits, plan, amount;
+
+//         switch (planId) {
+//             case "Basic":
+//                 plan = "Basic";
+//                 credits = 100;
+//                 amount = 10;
+//                 break;
+
+//             case "Business":
+//                 plan = "Business";
+//                 credits = 500;
+//                 amount = 50;
+//                 break;
+
+//             case "Enterprise":
+//                 plan = "Enterprise";
+//                 credits = 5000;
+//                 amount = 250;
+//                 break;
+
+//             default:
+//                 return res.json({
+//                     success: false,
+//                     message: "Invalid Plan"
+//                 });
+//         }
+
+//         // Save transaction
+//         const newTransaction = await transactionModel.create({
+//             clerkId,
+//             plan,
+//             amount,
+//             credits,
+//             payment: false,
+//             date: Date.now()
+//         });
+
+//         const options = {
+//             amount: amount * 100,
+//             currency: process.env.CURRENCY,
+//             receipt: newTransaction._id.toString()
+//         };
+
+//         const order = await razorpayInstance.orders.create(options);
+
+//         res.json({
+//             success: true,
+//             order
+//         });
+
+//     } catch (error) {
+//         console.log(error.message);
+//         res.json({
+//             success: false,
+//             message: error.message
+//         });
+//     }
+// };
+
 const paymentRazorpay = async (req, res) => {
     try {
         const { clerkId, planId } = req.body;
 
+        console.log("Received clerkId:", clerkId);
+
         const userData = await userModel.findOne({ clerkId });
+
+        console.log("User found:", userData);
 
         if (!userData || !planId) {
             return res.json({
@@ -130,7 +207,6 @@ const paymentRazorpay = async (req, res) => {
                 });
         }
 
-        // Save transaction
         const newTransaction = await transactionModel.create({
             clerkId,
             plan,
