@@ -1,14 +1,38 @@
 import mongoose from "mongoose";
 
-const transactionSchema = new mongoose.Schema({
-    clerkId : {type : String, required: true},
-    plan : {type : String, required: true},
-    amount : {type : Number, required: true},
-    credits : {type : Number, required: true},
-    payment : {type : Boolean, required: false},
-    date:{type:Number}
-})
+const userSchema = new mongoose.Schema({
+  clerkId: {
+    type: String,
+    required: true,
+    unique: true
+  },
 
-const transactionModel = mongoose.models.transaction || mongoose.model('transaction', transactionSchema)
+  email: {
+    type: String,
+    required: true
+  },
 
-export default transactionModel
+  firstName: {
+    type: String,
+    required: true
+  },
+
+  lastName: {
+    type: String
+  },
+
+  photo: {
+    type: String
+  },
+
+  creditBalance: {
+    type: Number,
+    default: 5
+  }
+});
+
+const userModel =
+  mongoose.models.user ||
+  mongoose.model("user", userSchema);
+
+export default userModel;
