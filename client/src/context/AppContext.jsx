@@ -35,43 +35,55 @@ const AppContextProvider = (props)=>{
     }
 
 
-    const removeBg = async(image)=>{
-        try{
-            if(!isSignedIn){
-                return openSignIn({})
+    const removeBg = async (image) => {
+    try {
+        if (!isSignedIn) {
+            return openSignIn({})
+        }
+
+        setImage(image)
+        setResultImage(false)
+
+        navigate('/result')
+
+        const token = await getToken()
+        const formData = new FormData()
+
+        if (image) {
+            formData.append('image', image)
+        }
+
+        const { data } = await axios.post(
+            backendUrl + `/api/image/remove-bg`,
+            formData,
+            { headers: { token } }
+        )
+
+        if (data.success) {
+            setResultImage(data.resultImage)
+            setCredit(data.creditBalance)
+        } 
+        else {
+            toast.error(data.message)
+
+            if (data.creditBalance !== undefined) {
+                setCredit(data.creditBalance)
             }
-            setImage(image)
-            setResultImage(false)
-            
-            navigate('/result')
 
-            const token = await getToken()
-            const formData = new FormData()
-            image && formData.append('image', image)
-
-            const{data} = await axios.post(backendUrl+`/api/image/remove-bg`, formData, {headers:{token}})
-
-            if(data.success){
-                resultImage(data.resultImage)
-                data.creditBalance && setCredit(data.creditBalance)
-            }
-            else{
-                toast.error(data.message)
-                data.creditBalance && setCredit(data.creditBalance)
-                if(data.credits === 0){
-                    navigate('/buy')
-                }
+            if (data.creditBalance === 0) {
+                navigate('/buy')
             }
         }
-        catch(error){
-            console.log(error)
-            toast.error(error.message)
-        }
+
+    } catch (error) {
+        console.log(error)
+        toast.error(error.message)
     }
+}
 
 
     const value = {
-        credit,setCredit,loadCreditsData,backendUrl, image, setImage, removeBg
+        credit,setCredit,loadCreditsData,backendUrl, image, setImage, removeBg, setResultImage, resultImage
     }
     return <AppContext.Provider value={value}>
         {props.children}
