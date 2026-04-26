@@ -1,19 +1,20 @@
 import React, { useContext } from 'react'
 import { assets, plans } from '../assets/assets'
-import { useAuth } from '@clerk/clerk-react'
+import { useAuth, useUser } from '@clerk/clerk-react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
 const BuyCredit = () => {
-
   const { backendUrl, loadCreditsData } = useContext(AppContext)
   const navigate = useNavigate()
+
   const { getToken } = useAuth()
+  const { user } = useUser()
 
   const initPay = async (order) => {
-    const option = {
+    const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: order.amount,
       currency: order.currency,
@@ -24,14 +25,28 @@ const BuyCredit = () => {
 
       handler: async (response) => {
         console.log(response)
+        const token = await getToken()
+        try{
+          const {data} = await axios.post(backendUrl+'/api/user/verify-razor', response,{headers:{token}})
+          if(data.success){
+            loadCreditsData()
+            navigate('/')
+            toast.success('Credit Added')
+          }
+        }
+        catch(error){
+          console.log(error)
+          toast.error(error.message)
+        }
 
-        // optional: verify payment here
+
+        // optional payment verification
         await loadCreditsData()
         navigate('/')
       }
     }
 
-    const rzp = new window.Razorpay(option)
+    const rzp = new window.Razorpay(options)
     rzp.open()
   }
 
@@ -41,7 +56,10 @@ const BuyCredit = () => {
 
       const { data } = await axios.post(
         backendUrl + '/api/user/pay-razor',
-        { planId },
+        {
+          planId,
+          clerkId: user.id
+        },
         {
           headers: { token }
         }
@@ -72,8 +90,8 @@ const BuyCredit = () => {
       <div className='flex flex-wrap justify-center gap-6 text-left'>
         {plans.map((item, index) => (
           <div
-            className='w-64 bg-white drop-shadow-sm border rounded-lg py-12 px-8 text-gray-700 hover:scale-105 transition-all duration-700'
             key={index}
+            className='w-64 bg-white drop-shadow-sm border rounded-lg py-12 px-8 text-gray-700 hover:scale-105 transition-all duration-700'
           >
             <img width={40} src={assets.logo_icon} alt="" />
 
@@ -82,7 +100,7 @@ const BuyCredit = () => {
 
             <p className='mt-6'>
               <span className='text-3xl font-medium'>
-                ${item.price}
+                ₹{item.price}
               </span>
               / {item.credits} credits
             </p>
