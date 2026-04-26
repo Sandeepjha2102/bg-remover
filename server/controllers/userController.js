@@ -1,5 +1,5 @@
 import { Webhook } from "svix";
-import userModel from "../models/userModel.js";
+import userModel from "../models/userModel.js"
 import razorpay from "razorpay";
 import transactionModel from "../models/transactionModel.js";
 

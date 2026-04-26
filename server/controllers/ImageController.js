@@ -1,7 +1,7 @@
 import axios from 'axios'
 import fs from 'fs'
 import FormData from 'form-data'
-import UserModel from '../models/UserModel.js'
+import userModel from '../models/userModel.js'
 
 
 // controller fn to remove bg
@@ -10,7 +10,7 @@ const removeBgImage = async (req, res) => {
         const clerkId = req.clerkId
         console.log("req.clerkId:", clerkId)
 
-        const user = await UserModel.findOne({ clerkId })
+        const user = await userModel.findOne({ clerkId })
         console.log("Mongo user:", user)
 
         if (!user) {
@@ -48,7 +48,7 @@ const removeBgImage = async (req, res) => {
         const base64Image = Buffer.from(data, 'binary').toString('base64')
         const resultImage = `data:${req.file.mimetype};base64,${base64Image}`
 
-        await UserModel.findByIdAndUpdate(user._id, {
+        await userModel.findByIdAndUpdate(user._id, {
             creditBalance: user.creditBalance - 1
         })
 
