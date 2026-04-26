@@ -18,14 +18,15 @@ const clerkWebhook = async (req, res) => {
 
         switch (type) {
             case "user.created":
-                await userModel.create({
-                    clerkId: data.id,
-                    email: data.email_addresses[0].email_address,
-                    firstName: data.first_name,
-                    lastName: data.last_name,
-                    photo: data.image_url
-                });
-                break;
+    await userModel.create({
+        clerkId: data.id,
+        email: data.email_addresses?.[0]?.email_address || "",
+        firstName: data.first_name || "",
+        lastName: data.last_name || "",
+        photo: data.image_url || "",
+        creditBalance: 5
+    });
+    break;
 
             case "user.updated":
                 await userModel.findOneAndUpdate(

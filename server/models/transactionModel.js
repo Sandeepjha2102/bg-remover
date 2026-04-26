@@ -7,10 +7,9 @@ const userSchema = new mongoose.Schema({
     unique: true
   },
 
-  email: {
-    type: String,
-    required: true
-  },
+email: {
+   type: String
+},
 
   firstName: {
     type: String,
@@ -21,9 +20,9 @@ const userSchema = new mongoose.Schema({
     type: String
   },
 
-  photo: {
-    type: String
-  },
+photo: {
+   type: String
+},
 
   creditBalance: {
     type: Number,
