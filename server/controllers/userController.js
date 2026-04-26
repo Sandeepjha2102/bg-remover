@@ -26,6 +26,9 @@ const clerkWebhook = async (req, res) => {
                     lastName: data.last_name,
                     photo: data.image_url
                 }
+                
+                console.log("User Created Event Triggered")
+                console.log(userData)
 
                 await userModel.create(userData)
                 res.json({})
