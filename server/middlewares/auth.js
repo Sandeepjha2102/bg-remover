@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken'
 
-//middleware to decode twt token to get clerk id 
-const authUser = async(req, res, next) => {
-    try{
-        const {token} = req.headers
-        if(!token) {
+// middleware to decode jwt token to get clerk id
+const authUser = async (req, res, next) => {
+    try {
+        const { token } = req.headers
+
+        if (!token) {
             return res.json({
                 success: false,
                 message: "Not authorized, login again"
@@ -12,12 +13,13 @@ const authUser = async(req, res, next) => {
         }
 
         const token_decoded = jwt.decode(token)
-        req.body.clerkId = token_decoded.clerkId
+
+        req.clerkId = token_decoded.clerkId
         next()
-    }
-    
-    catch (error) {
+
+    } catch (error) {
         console.log(error.message)
+
         res.json({
             success: false,
             message: error.message
@@ -25,4 +27,4 @@ const authUser = async(req, res, next) => {
     }
 }
 
-export {authUser}
+export { authUser }
