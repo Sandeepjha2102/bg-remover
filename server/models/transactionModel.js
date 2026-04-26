@@ -7,22 +7,25 @@ const userSchema = new mongoose.Schema({
     unique: true
   },
 
-email: {
-   type: String
-},
+  email: {
+    type: String,
+    default: ""
+  },
 
   firstName: {
     type: String,
-    required: true
+    default: ""
   },
 
   lastName: {
-    type: String
+    type: String,
+    default: ""
   },
 
-photo: {
-   type: String
-},
+  photo: {
+    type: String,
+    default: ""
+  },
 
   creditBalance: {
     type: Number,
