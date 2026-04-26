@@ -96,3 +96,5 @@ const userCredits = async (req, res) => {
         })
     }
 }
+
+export { clerkWebhook, userCredits }
