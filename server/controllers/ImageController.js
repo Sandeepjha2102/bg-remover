@@ -7,7 +7,7 @@ import UserModel from '../models/UserModel.js'
 // controller fn to remove bg
 const removeBgImage = async(req, res)=>{
     try{
-        const{clerkId} = req.body
+        const{clerkId} = req.clerkId
         const user = await UserModel.findOne({clerkId})
 
         if(!user){
